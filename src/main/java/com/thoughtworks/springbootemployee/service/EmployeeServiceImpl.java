@@ -1,10 +1,12 @@
 package com.thoughtworks.springbootemployee.service;
 
 import com.thoughtworks.springbootemployee.entity.Employee;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
     List<Employee> employees = new ArrayList<>();
 
@@ -20,29 +22,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void addEmployee(Employee employee) {
-        Employee employeeInDatabase = employees.stream().findFirst().orElse(null);
+        Employee employeeInDatabase = employees.stream().filter(e -> e.getId() == employee.getId()).findFirst().orElse(null);
         if (employeeInDatabase == null)
             employees.add(employee);
     }
 
     @Override
-    public void updateEmployee(int id, Employee employee) {
-        Employee employeeInDatabase = employees.stream().findFirst().orElse(null);
+    public void updateEmployee(Employee employee) {
+        Employee employeeInDatabase = employees.stream().filter(e -> e.getId() == employee.getId()).findFirst().orElse(null);
 
         if (employeeInDatabase != null) {
             employeeInDatabase.setName(employee.getName());
             employeeInDatabase.setAge(employee.getAge());
             employeeInDatabase.setGender(employee.getGender());
         }
-        //TODO 异常抛出
     }
 
     @Override
     public void deleteEmployee(int id) {
-        Employee employeeInDatabase = employees.stream().findFirst().orElse(null);
+        Employee employeeInDatabase = employees.stream().filter(e -> e.getId() == id).findFirst().orElse(null);
         if (employeeInDatabase != null) {
             employees.remove(employeeInDatabase);
         }
-        //Todo 异常抛出
     }
 }
